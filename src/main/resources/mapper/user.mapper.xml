@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.recycle.mapper.UserMapper">
+
+    <resultMap id="userResultMap" type="com.qianfeng.recycle.po.TbUser">
+        <id property="userId" column="user_id" javaType="java.lang.Long"/>
+        <result property="fronzenBalance" column="frozen_balance" javaType="java.lang.Long"/>
+        <result property="alipayInfo" column="alipay_info" javaType="java.lang.String"/>
+        <result property="payPassword" column="pay_password" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="checkUsername" resultMap="userResultMap">
+        select user_id,username,password from tb_user where username=#{username};
+    </select>
+
+    <insert id="saveUser">
+        insert into tb_user(username,password)
+        values(#{username},#{password});
+    </insert>
+</mapper>

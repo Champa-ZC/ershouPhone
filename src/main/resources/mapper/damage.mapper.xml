@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.recycle.mapper.DamageMapper">
+
+    <resultMap id="damageResultMap" type="com.qianfeng.recycle.vo.DamageVO">
+        <id property="damageId" column="damage_id" javaType="java.lang.Long"/>
+        <result property="damageName" column="damage_name" javaType="java.lang.String"/>
+        <collection property="damageInfoVOList" ofType="com.qianfeng.recycle.vo.DamageInfoVO">
+            <id property="infoId" column="info_id" javaType="java.lang.Long"/>
+            <result property="damageInfo" column="damage_info" javaType="java.lang.String"/>
+            <result property="damageInfoDescrible" column="damage_info_describle" javaType="java.lang.String"/>
+        </collection>
+    </resultMap>
+    
+    <select id="queryDamageAndInfo" resultMap="damageResultMap">
+       select d.damage_id,i.info_id,p.type,p.price,d.damage_name,i.damage_info,i.damage_info_describle
+        from tb_damage d
+        join tb_damage_info i
+        on d.damage_id = i.damage_id
+        join tb_discount s
+        on i.info_id = s.info_id
+        join tb_phone p
+        on s.phone_id = p.phone_id
+        and p.phone_id = #{phoneId}
+        and d.damage_id
+        between #{beginDamageId}
+        and #{endDamageId};
+    </select>
+</mapper>

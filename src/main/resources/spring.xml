@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <context:component-scan base-package="com.qianfeng.recycle"/>
+    <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
+
+    <bean id="mapperScan" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.qianfeng.recycle.mapper"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSources"/>
+        <property name="mapperLocations" value="classpath:mapper/*.mapper.xml"/>
+    </bean>
+    <bean id="dataSources" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ershou"/>
+        <property name="user" value="root"/>
+        <property name="password" value="196729"/>
+    </bean>
+
+    <!--上传配置-->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+        <!--设置上传文件的最大大小，单位byte，比如200000代表200KB-->
+        <!-- one of the properties available; the maximum file size in bytes -->
+        <property name="maxUploadSize" value="200000"/>
+
+    </bean>
+
+    <!--将Java对象转换成json格式对象-->
+    <!--结合@ResponseBody使用才有效-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="objectMapper"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"
+          p:indentOutput="true"
+          p:simpleDateFormat="yyyy-MM-dd"/>
+
+   <!-- &lt;!&ndash;shiro&ndash;&gt;
+    &lt;!&ndash;SHiro委派给Spring完成的过滤器功能&ndash;&gt;
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/html/login.html"/>
+        &lt;!&ndash;没有权限会进入此配置页面&ndash;&gt;
+        <property name="unauthorizedUrl" value="/html/auth.html"/>
+        &lt;!&ndash; override these for application-specific URLs if you like:
+        <property name="loginUrl" value="/login.jsp"/>
+        <property name="successUrl" value="/home.jsp"/>
+        <property name="unauthorizedUrl" value="/unauthorized.jsp"/> &ndash;&gt;
+        &lt;!&ndash; The 'filters' property is not necessary since any declared javax.servlet.Filter bean  &ndash;&gt;
+        &lt;!&ndash; defined will be automatically acquired and available via its beanName in chain        &ndash;&gt;
+        &lt;!&ndash; definitions, but you can perform instance overrides or name aliases here if you like: &ndash;&gt;
+        &lt;!&ndash; <property name="filters">
+            <util:map>
+                <entry key="anAlias" value-ref="someFilter"/>
+            </util:map>
+        </property> &ndash;&gt;
+        &lt;!&ndash;配置拦截规则&ndash;&gt;
+        &lt;!&ndash;<property name="filterChainDefinitions">&ndash;&gt;
+            &lt;!&ndash;&lt;!&ndash;authc标识必须登录&ndash;&gt;&ndash;&gt;
+            &lt;!&ndash;<value>&ndash;&gt;
+                &lt;!&ndash;/hello.jsp=authc,perms[商品管理]&ndash;&gt;
+            &lt;!&ndash;</value>&ndash;&gt;
+        &lt;!&ndash;</property>&ndash;&gt;
+    </bean>
+
+    &lt;!&ndash;厨师&ndash;&gt;
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        &lt;!&ndash; Single realm app.  If you have multiple realms, use the 'realms' property instead. &ndash;&gt;
+        &lt;!&ndash;食材&ndash;&gt;
+        <property name="realm" ref="myRealm"/>
+        &lt;!&ndash; By default the servlet container sessions will be used.  Uncomment this line
+             to use shiro's native sessions (see the JavaDoc for more): &ndash;&gt;
+        &lt;!&ndash; <property name="sessionMode" value="native"/> &ndash;&gt;
+    </bean>
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    &lt;!&ndash; Define the Shiro Realm implementation you want to use to connect to your back-end &ndash;&gt;
+    &lt;!&ndash; security datasource: &ndash;&gt;
+    &lt;!&ndash;能提供的自定义的食材&ndash;&gt;
+    <bean id="myRealm" class="com.qianfeng.recycle.realm.MyRealm">
+    </bean>
+
+
+    &lt;!&ndash; Enable Shiro Annotations for Spring-configured beans.  Only run after &ndash;&gt;
+    &lt;!&ndash; the lifecycleBeanProcessor has run: &ndash;&gt;
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>-->
+
+</beans>

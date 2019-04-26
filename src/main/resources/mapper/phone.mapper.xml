@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.recycle.mapper.PhoneMapper">
+
+    <resultMap id="phoneResultMap" type="com.qianfeng.recycle.po.TbPhone">
+        <id property="phoneId" column="phone_id" javaType="java.lang.Integer"/>
+        <result property="priceId" column="price_id" javaType="java.lang.Integer"/>
+        <result property="cartId" column="cart_id" javaType="java.lang.Integer"/>
+        <result property="brandId" column="brand_id" javaType="java.lang.Integer"/>
+        <result property="phoneImg" column="phone_img" javaType="java.lang.String"/>
+        <result property="versionInfo" column="version_info" javaType="java.lang.String"/>
+    </resultMap>
+
+
+
+    <select id="queryAllPhone" resultMap="phoneResultMap">
+        select phone_id,price_id,cart_id,brand_id,price,phone_img,type,color,version,memory,version_info from tb_phone;
+    </select>
+
+    <select id="queryPhoneByBrandId" resultMap="phoneResultMap">
+        select phone_id,price_id,cart_id,brand_id,price,phone_img,type,color,version,memory,version_info from tb_phone where brand_id = #{brandId};
+    </select>
+
+</mapper>
